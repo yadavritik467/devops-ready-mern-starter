@@ -1,0 +1,65 @@
+name: CI - Frontend & Backend Build Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    name: Frontend Build Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install frontend deps
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build
+
+  backend:
+    name: Backend Build Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install backend deps
+        run: npm install
+
+      - name: Test backend build
+        run: |
+          if [ ! -f package.json ]; then
+            exit 1
+          fi
+
+  docker:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build frontend image
+        run: docker build -t test-frontend ./frontend
+
+      - name: Build backend image
+        run: docker build -t test-backend ./backend
