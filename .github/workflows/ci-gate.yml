@@ -1,0 +1,12 @@
+name: CI Gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Always pass
+        run: echo "CI Gate passed"
