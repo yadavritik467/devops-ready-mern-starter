@@ -4,36 +4,41 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  checks: read
+
 jobs:
   gate:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Detect changes
-        id: changes
-        uses: tj-actions/changed-files@v44
+      - name: Decide CI status
+        uses: actions/github-script@v7
         with:
-          files: |
-            frontend/**
-            backend/**
+          script: |
+            const { owner, repo } = context.repo;
+            const sha = context.payload.pull_request.head.sha;
 
-      # ---------- FRONTEND ----------
-      - name: Frontend CI
-        if: steps.changes.outputs.any_changed_frontend == 'true'
-        working-directory: frontend
-        run: |
-          npm ci
-          npm run build
+            const checks = await github.rest.checks.listForRef({
+              owner,
+              repo,
+              ref: sha,
+            });
 
-      # ---------- BACKEND ----------
-      - name: Backend CI
-        if: steps.changes.outputs.any_changed_backend == 'true'
-        working-directory: backend
-        run: |
-          npm ci
-          npm run build
+            const frontend = checks.data.check_runs.find(c =>
+              c.name.includes("Frontend CI")
+            );
+            const backend = checks.data.check_runs.find(c =>
+              c.name.includes("Backend CI")
+            );
 
-      - name: CI Gate Passed
-        run: echo "All required checks passed"
+            if (frontend && frontend.conclusion !== "success") {
+              core.setFailed("Frontend CI failed");
+            }
+
+            if (backend && backend.conclusion !== "success") {
+              core.setFailed("Backend CI failed");
+            }
+
+            console.log("CI Gate passed");
