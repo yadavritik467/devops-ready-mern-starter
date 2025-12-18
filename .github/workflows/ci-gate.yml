@@ -1,4 +1,4 @@
-name: CI Gate
+name: CI Gate / gate
 
 on:
   pull_request:
