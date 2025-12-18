@@ -2,7 +2,7 @@ import express, { type Request, type Response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 
-// const app = express();
+const app = express();
 
 
 const port = 4500;
