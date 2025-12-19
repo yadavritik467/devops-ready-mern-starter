@@ -15,7 +15,13 @@ jobs:
         working-directory: ./frontend
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Cache node modules  
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -45,7 +51,9 @@ jobs:
           if git diff --cached --quiet; then
              echo "No changes to commit"
           else
-            git commit -m "Update files via GitHub Actions"
-            git push origin ${{ github.head_ref }}
+            git commit -m "chore(frontend): apply prettier formatting"
+            git push origin HEAD:${{ github.head_ref }}
           fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
           
