@@ -1,4 +1,4 @@
-name: Frontend CI + Docker
+name: Frontend PR - Checker
 
 on:
   pull_request:
@@ -34,7 +34,3 @@ jobs:
       - name: Run prettier
         working-directory: frontend
         run: npm run format
-
-      # - name: Build Docker Image (only if build pass)
-      #   if: success()
-      #   run: docker build -t frontend-test .
