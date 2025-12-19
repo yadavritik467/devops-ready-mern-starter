@@ -1,5 +1,8 @@
 name: Frontend PR - Checker
 
+permissions:
+  contents: write
+  
 on:
   pull_request:
     branches: [main]
