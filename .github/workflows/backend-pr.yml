@@ -1,4 +1,4 @@
-name: Backend CI + Docker
+name: Backend PR Chekcker
 
 on:
   pull_request:
