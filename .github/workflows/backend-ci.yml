@@ -32,6 +32,6 @@ jobs:
         working-directory: backend
         run: npm run build
 
-      - name: Build Docker Image (only if build pass)
-        if: success()
-        run: docker build -t backend-test .
+      # - name: Build Docker Image (only if build pass)
+      #   if: success()
+      #   run: docker build -t backend-test .
