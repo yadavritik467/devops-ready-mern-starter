@@ -1,8 +1,8 @@
-name: Backend PR Chekcker
+name: Backend PR - Checker
 
 permissions:
   contents: write
-
+  
 on:
   pull_request:
     branches: [main]
@@ -36,17 +36,16 @@ jobs:
         working-directory: backend
         run: npm ci 
 
-
       - name: Run Build
         working-directory: backend
         run: npm run build
-
+      
       - name: Run prettier
-        working-directory: frontend
+        working-directory: backend
         run: npm run format
 
       - name: Commit and push changes (Formatted Code)
-        working-directory: frontend
+        working-directory: backend
         run: |
           git config --global user.name ${{github.actor}}
           git config --global user.email ${{github.event.pull_request.user.login}}
@@ -60,7 +59,4 @@ jobs:
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
-
-      # - name: Build Docker Image (only if build pass)
-      #   if: success()
-      #   run: docker build -t backend-test .
+          
