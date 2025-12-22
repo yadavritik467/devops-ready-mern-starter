@@ -17,7 +17,7 @@ export default tseslint.config(
         { argsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-explicit-any': 'error',
-      'no-console': 'warn',
+      'no-console': 'off',
     },
   },
   {

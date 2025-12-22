@@ -11,8 +11,10 @@ const dbConnection = async () => {
     await mongoose.connect('mongodb://mongo:27017/dev-ops-db')
 
     console.log('db connected')
-  } catch (error: any) {
-    console.log('db connection failed', error.message)
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log('db connection failed', error.message)
+    }
   }
 }
 app.use(
